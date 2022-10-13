@@ -118,9 +118,17 @@ const MemeComponent = () => {
                 {active.tagName === "P" ? <BiText /> : <BiImage />}
                 <input
                   type="text"
-                  value={active.getAttribute("uid")}
+                  value={
+                    window.innerWidth > 768
+                      ? active.getAttribute("uid")
+                      : active.innerText
+                  }
                   onChange={(e) => {
-                    active.setAttribute("uid", e.target.value);
+                    if (window.innerWidth > 768) {
+                      active.setAttribute("uid", e.target.value);
+                    } else {
+                      active.innerText = e.target.value;
+                    }
                     setReload(!reload);
                   }}
                 />
@@ -253,6 +261,7 @@ const MemeComponent = () => {
               setElements((el) => [
                 ...el,
                 <Draggable>
+                  {/* // <section> */}
                   <p
                     contentEditable={true}
                     suppressContentEditableWarning={true}
@@ -275,12 +284,14 @@ const MemeComponent = () => {
                     //@ts-ignore
                     uid={`Text-${elements.length + 1}`}
                     onClick={(e) => {
+                      console.log("clicked");
                       //@ts-ignore
                       setActive(e.target);
                     }}
                   >
                     What Do You Want To Write?&nbsp;
                   </p>
+                  {/* </section>, */}
                 </Draggable>,
               ]);
             }}
