@@ -1,0 +1,127 @@
+.meme-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  gap: 4vmin;
+  padding: 10vmin 0;
+  box-sizing: border-box;
+  .elements-list {
+    // position: fixed;
+    // left: 2vmax;
+    // bottom: 4vmin;
+    margin-bottom: 5vmin;
+    border: 2px solid #777;
+    border-radius: 4px;
+    padding: 2vmin 2vmax;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    &-item {
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 2vmin;
+      border-bottom: 1px solid #777;
+      &--active {
+        background: #777;
+      }
+    }
+  }
+  .active-container {
+    .active-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3vmin;
+    }
+    .modifier-section {
+      display: flex;
+      align-items: center;
+      gap: 2vmax;
+      .modifier-heading {
+        display: flex;
+        align-items: center;
+        gap: 1vmin;
+      }
+    }
+    // position: fixed;
+    // left: 2vmax;
+    // bottom: 4vmin;
+    border: 2px solid #777;
+    border-radius: 4px;
+    padding: 2vmin 2vmax;
+    display: flex;
+    flex-direction: column;
+    gap: 2vmin;
+    justify-content: flex-start;
+  }
+  .toolbar {
+    // position: fixed;
+    // right: 4vmax;
+    // top: 50%;
+    // transform: translateY(-50%);
+    border: 2px solid #777;
+    border-radius: 4px;
+    padding: 2vmin 2vmax;
+    &-button {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      border: 1px solid #777;
+      padding: 1vmin;
+      cursor: pointer;
+      box-shadow: -4px 4px 2px -3px #000;
+      transition: all 0.2s ease;
+      &:active {
+        box-shadow: none;
+        transform: translate(-2px, 2px);
+      }
+    }
+  }
+  .meme {
+    height: 70vmin;
+    width: 70vmin;
+    overflow: hidden;
+    position: relative;
+    .default-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      padding: 4px;
+      //   cursor: pointer;
+    }
+    .default-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      padding: 4px;
+      max-height: 30%;
+      max-width: 30%;
+      object-fit: cover;
+      //   cursor: pointer;
+    }
+    .image-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // background: #777;
+      img {
+        object-fit: cover;
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+}
