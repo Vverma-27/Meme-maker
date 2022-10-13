@@ -10,8 +10,11 @@ import {
   BiText,
   BiTrash,
 } from "react-icons/bi";
-import Draggable from "react-draggable";
+// import Draggable from "react-draggable";
 import html2canvas from "html2canvas";
+import { Rnd } from "react-rnd";
+import Draggable from "react-draggable";
+// import { Resizable } from "re-resizable";
 
 function componentToHex(c: number) {
   var hex = c.toString(16);
@@ -26,6 +29,12 @@ function rgbToHex(color: string) {
     .map((e) => parseInt(e));
   // console.log(r, r.toString(16));
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function getOffset(el) {
+  const rect = el.getBoundingClientRect();
+  console.log(rect);
+  return rect;
 }
 
 const exportComp = async (ref: RefObject<HTMLElement>) => {
@@ -47,6 +56,7 @@ const MemeComponent = () => {
   const [active, setActive] = useState<HTMLElement>(null);
   const [reload, setReload] = useState(true);
   const downloadRef: RefObject<HTMLElement> = useRef<HTMLElement>(null);
+  const bgimageContainerRef: RefObject<HTMLElement> = useRef<HTMLElement>(null);
   // console.log(
   //   "🚀 ~ file: index.tsx ~ line 11 ~ MemeComponent ~ active",
   //   active,
@@ -64,8 +74,10 @@ const MemeComponent = () => {
           padding: "0 4vmax",
           justifyContent: "space-between",
           alignItems: "flex-start",
+          flexWrap: "wrap",
           width: "100%",
           boxSizing: "border-box",
+          gap: window.innerWidth < 768 ? "6vmin" : 0,
         }}
       >
         <section>
@@ -73,22 +85,27 @@ const MemeComponent = () => {
             {elements.map((el) => {
               const isActive =
                 active &&
-                el.props.children.props.uid === active.getAttribute("uid");
-              const isImage = el.props.children.type === "img";
+                (el.props.children.props.uid === active.getAttribute("uid") ||
+                  el.props.children.props.uid === active.getAttribute("uid"));
+              const isImage = Boolean(el.props.children.type === "img");
               return (
                 <p
                   className={`${styles[`elements-list-item`]} ${
                     isActive && styles[`elements-list-item--active`]
                   }`}
                   onClick={(e) => {
-                    const el1: HTMLElement = document.querySelector(
-                      `[uid=${el.props.children.props.uid}]`
-                    );
+                    const el1: HTMLElement =
+                      document.querySelector(
+                        `[uid=${el.props.children.props.uid}]`
+                      ) ||
+                      document.querySelector(
+                        `[uid=${el.props.children.props.uid}]`
+                      );
                     setActive(el1);
                   }}
                 >
                   {isImage ? <BiImage /> : <BiText />}
-                  {el.props.children.props.uid}
+                  {el.props.children.props.uid || el.props.children.props.uid}
                 </p>
               );
             })}
@@ -115,7 +132,9 @@ const MemeComponent = () => {
                       elements.filter((el) => {
                         return (
                           el.props.children.props.uid !==
-                          active.getAttribute("uid")
+                            active.getAttribute("uid") &&
+                          el.props.children.props.uid !==
+                            active.getAttribute("uid")
                         );
                       })
                     );
@@ -202,13 +221,28 @@ const MemeComponent = () => {
         <section className={styles.meme} ref={downloadRef}>
           <section
             className={styles[`image-container`]}
+            ref={bgimageContainerRef}
             style={{
               background: data
                 ? `linear-gradient(to bottom, ${data?.[0]},${data?.[1]},${data?.[2]})`
                 : "#777",
             }}
           >
-            <img src={source} />
+            {bgimageContainerRef.current ? (
+              <Rnd
+                default={{
+                  x: 0,
+                  y: 0,
+                  width: bgimageContainerRef.current.clientWidth,
+                  height: bgimageContainerRef.current.clientHeight,
+                }}
+                // onResizeStart={(e) => {
+                //   e.stopPropagation();
+                // }}
+              >
+                <img src={source} />
+              </Rnd>
+            ) : null}
           </section>
           {elements}
         </section>
@@ -268,10 +302,20 @@ const MemeComponent = () => {
               // setSource(src);
               setElements((el) => [
                 ...el,
-                <Draggable>
+                <Rnd
+                  defaultSize={{
+                    x: 0,
+                    y: 0,
+                    width: 400,
+                    height: 400,
+                  }}
+                  onResizeStart={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
                   <img
-                    className={styles[`default-img`]}
                     src={src}
+                    className={styles[`default-img`]}
                     //@ts-ignore
                     uid={`Image-${elements.length + 1}`}
                     onClick={(e) => {
@@ -279,7 +323,7 @@ const MemeComponent = () => {
                       setActive(e.target);
                     }}
                   />
-                </Draggable>,
+                </Rnd>,
               ]);
             }}
             id="additional-img"

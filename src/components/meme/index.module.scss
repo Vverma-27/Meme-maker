@@ -99,15 +99,13 @@
       //   cursor: pointer;
     }
     .default-img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff;
-      padding: 4px;
-      max-height: 30%;
-      max-width: 30%;
-      object-fit: cover;
+      // position: absolute !important;
+      // top: 50%;
+      // left: 50%;
+      // transform: translate(-50%, -50%);
+      max-height: 100%;
+      max-width: 100%;
+      // object-fit: cover;
       //   cursor: pointer;
     }
     .image-container {
